@@ -1,5 +1,5 @@
-name: Blobby
-description: Bloby project
+name: a_blob
+description: Project for children with dyslexia.
 
 publish_to: 'none'
 
@@ -12,6 +12,8 @@ dependencies:
   flutter:
     sdk: flutter
 
+  animated_splash_screen:
+  flutter_svg: ^1.0.3
   cupertino_icons: ^1.0.2
   im_stepper: ^0.1.3
   flutter_native_splash: ^2.1.1
@@ -27,11 +29,13 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/images/octopus.svg
   fonts:
     - family: adys
       fonts:
-        - asset: fonts/ADYS-Regular-V5-4.ttf
-        - asset: fonts/ADYS-Bold-V5-4.ttf
+        - asset: assets/fonts/ADYS-Regular-V5-4.ttf
+        - asset: assets/fonts/ADYS-Bold-V5-4.ttf
           weight: 700
 
 flutter_icons:
@@ -39,6 +43,6 @@ flutter_icons:
   ios: true
   image_path: "assets/logo.png"
 
-flutter_native_splash:
+flutter_native_splash: #настроить время, сколько показывается --- сделать через svg?
   color: "#101010"
   image: "assets/logo.png"

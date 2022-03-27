@@ -1,14 +1,13 @@
 import 'dart:math';
-
-import 'package:Blobby/styles.dart';
-import 'package:Blobby/widgets.dart';
-import 'package:Blobby/models.dart';
+import 'package:a_blob/resources/styles.dart';
+import 'package:a_blob/resources/theme.dart';
+import 'package:a_blob/uikit/widgets/task_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dataManager.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized(); //change here duration of splash page
   runApp(const MyApp());
 }
 
@@ -18,12 +17,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Blob',
-      theme: ThemeData(
-          textTheme: const TextTheme(
-              bodyText2: TextStyle(
-        fontFamily: 'adys',
-      ))),
+      title: 'a_blob',
+      theme: usualTheme,
       home: const HomePage(),
     );
   }

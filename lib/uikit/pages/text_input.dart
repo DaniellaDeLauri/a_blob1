@@ -1,10 +1,7 @@
-import 'dart:ffi';
-import 'dart:math';
-
-import 'package:Blobby/dataManager.dart';
-import 'package:Blobby/styles.dart';
-import 'package:Blobby/widgets.dart';
-import 'package:Blobby/models.dart';
+import 'package:a_blob/dataManager.dart';
+import 'package:a_blob/resources/styles.dart';
+import 'package:a_blob/uikit/widgets/confetti.dart';
+import 'package:a_blob/resources/models.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:im_stepper/stepper.dart';
@@ -25,6 +22,7 @@ class _TextInputPageState extends State<TextInputPage> {
   List<TextEditingController> textFieldControllers = [];
   int result = 0;
   late ConfettiController _confettiController;
+  //var _text = '';
 
   @override
   void initState() {
@@ -36,9 +34,15 @@ class _TextInputPageState extends State<TextInputPage> {
     }
   }
 
+  @override
+  void dispose() {
+    textFieldControllers[activeStep].dispose();
+    super.dispose();
+  }
+
   Future<void> saveUserResult() async {
     await dataManager.saveUserResult(widget.task.id, result);
-    widget.update(true);
+    widget.update(true); //сохранение результатов
   }
 
   @override
@@ -79,7 +83,7 @@ class _TextInputPageState extends State<TextInputPage> {
                     padding: const EdgeInsets.all(18.0),
                     child: SingleChildScrollView(
                       physics: const BouncingScrollPhysics(),
-                      child: steps(),
+                      child: steps(), //column steps
                     )),
               ],
             )),
@@ -91,6 +95,18 @@ class _TextInputPageState extends State<TextInputPage> {
         ),
       ),
     );
+  }
+
+  Color get _colorborder {
+    final text = textFieldControllers[activeStep].text;
+
+    if (text.isEmpty){
+      return Colors.blue;
+    }
+    if (widget.task.tasks[activeStep].rightAnswer.toLowerCase() != text){
+      return Colors.red;
+    }
+    return Colors.green;
   }
 
   steps() {
@@ -134,7 +150,7 @@ class _TextInputPageState extends State<TextInputPage> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: const Text('Закрыть'))
+              child: const Text('Меню'))
         ],
       );
     } else {
@@ -155,27 +171,21 @@ class _TextInputPageState extends State<TextInputPage> {
             style: const TextStyle(color: light50, fontSize: 18),
           ),
           const SizedBox(height: 15),
-          TextField(
+          TextField( //errorhint
             enabled: dotCount == widget.task.tasks.length,
             controller: textFieldControllers[activeStep],
             style: const TextStyle(color: Colors.white),
             decoration: InputDecoration(
-                disabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: (widget.task.tasks[activeStep].rightAnswer
-                                    .toLowerCase() ==
-                                textFieldControllers[activeStep].text)
-                            ? Colors.green
-                            : Colors.red,
-                        width: 3)),
                 enabledBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color: accent, width: 3),
-                ),
-                focusedBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue, width: 3),
+                    borderSide: BorderSide(
+                        color: accent, //changeable
+                        width: 3)),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: _colorborder, width: 3),
                 ),
                 hintText: 'Введи ответ',
                 hintStyle: TextStyle(color: light50)),
+              onChanged: (_) => setState(() {}),
           ),
         ],
       );

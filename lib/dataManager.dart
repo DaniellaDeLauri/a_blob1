@@ -1,4 +1,4 @@
-import 'package:Blobby/models.dart';
+import 'package:a_blob/resources/models.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 DataManager dataManager = DataManager();

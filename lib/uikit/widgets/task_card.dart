@@ -1,12 +1,9 @@
-import 'package:Blobby/styles.dart';
-import 'package:confetti/confetti.dart';
+import 'package:a_blob/resources/styles.dart';
 import 'package:flutter/material.dart';
-import 'package:im_stepper/stepper.dart';
+import 'package:a_blob/uikit/pages/text_input.dart';
+import 'package:a_blob/resources/models.dart';
 
-import 'activities/textInput.dart';
-import 'models.dart';
-
-class TaskCard extends StatefulWidget {
+class TaskCard extends StatefulWidget { //menutask
   TaskCard({
     Key? key,
     required this.task,
@@ -52,9 +49,9 @@ class _TaskCardState extends State<TaskCard> {
                   style: TextStyle(
                       fontSize: 22,
                       color:
-                          (widget.task.userResult == widget.task.tasks.length)
-                              ? Colors.white
-                              : dark),
+                      (widget.task.userResult == widget.task.tasks.length)
+                          ? Colors.white
+                          : dark),
                 ),
               ),
               Text(
@@ -70,35 +67,4 @@ class _TaskCardState extends State<TaskCard> {
               ),
             ])));
   }
-}
-
-Widget confetti(ConfettiController _confettiController) {
-  return Positioned(
-    bottom: 0,
-    left: 0,
-    right: 0,
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        ConfettiWidget(
-          minBlastForce: 50,
-          maxBlastForce: 200,
-          numberOfParticles: 5,
-          blastDirection: -1.5708 + 0.3,
-          gravity: 0.5,
-          emissionFrequency: 0.2,
-          confettiController: _confettiController,
-        ),
-        ConfettiWidget(
-          minBlastForce: 50,
-          maxBlastForce: 200,
-          numberOfParticles: 5,
-          blastDirection: -1.5708 - 0.3,
-          gravity: 0.5,
-          emissionFrequency: 0.2,
-          confettiController: _confettiController,
-        )
-      ],
-    ),
-  );
 }
