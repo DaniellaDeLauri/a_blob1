@@ -1,12 +1,14 @@
 import 'dart:math';
 
-import 'package:blob/styles.dart';
-import 'package:blob/widgets.dart';
-import 'package:blob/models.dart';
+import 'package:Blobby/styles.dart';
+import 'package:Blobby/widgets.dart';
+import 'package:Blobby/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'dataManager.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -37,15 +39,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late ScrollController _scrollController;
   late double _scrollPosition = 0;
-  List<Task> tasks = [
-    Task(name: 'Анаграммы', maxResult: 6, userResult: 7),
-    Task(name: 'Синонимы', maxResult: 0, userResult: 7),
-    Task(name: 'Состав числа', maxResult: 6, userResult: 7),
-    Task(name: 'Антонимы', maxResult: 7, userResult: 7),
-    Task(name: 'Лишнее слово', maxResult: 5, userResult: 7),
-    Task(name: 'Слово по формуле', maxResult: 3, userResult: 7),
-  ];
-
   _scrollListener() {
     setState(() {
       _scrollPosition = _scrollController.position.pixels;
@@ -53,13 +46,19 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
-  void initState() {
+  initState() {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: dark, // status bar color
+      statusBarColor: dark,
     ));
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
+    init();
     super.initState();
+  }
+
+  Future<void> init() async {
+    await dataManager.initializeUserResults();
+    setState(() {});
   }
 
   @override
@@ -70,7 +69,7 @@ class _HomePageState extends State<HomePage> {
           controller: _scrollController,
           physics: const BouncingScrollPhysics(),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 48),
-          itemCount: tasks.length + 1,
+          itemCount: DataManager().tasks.length + 1,
           itemBuilder: (_, i) {
             if (i == 0) {
               return Column(
@@ -95,7 +94,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               );
             }
-            return TaskCard(task: tasks[i - 1]);
+            return TaskCard(task: dataManager.tasks[i - 1]);
           },
         ));
   }

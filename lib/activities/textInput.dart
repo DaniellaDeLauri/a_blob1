@@ -1,20 +1,19 @@
 import 'dart:ffi';
 import 'dart:math';
 
-import 'package:blob/styles.dart';
-import 'package:blob/widgets.dart';
-import 'package:blob/models.dart';
+import 'package:Blobby/dataManager.dart';
+import 'package:Blobby/styles.dart';
+import 'package:Blobby/widgets.dart';
+import 'package:Blobby/models.dart';
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:im_stepper/stepper.dart';
 
 class TextInputPage extends StatefulWidget {
-  TextInputPage({
-    Key? key,
-    required this.tasks,
-    required this.hint,
-  }) : super(key: key);
-  List<TextInputTask> tasks;
-  String hint;
+  TextInputPage({Key? key, required this.task, required this.update})
+      : super(key: key);
+  Task task;
+  final ValueChanged<bool> update;
 
   @override
   State<TextInputPage> createState() => _TextInputPageState();
@@ -25,13 +24,21 @@ class _TextInputPageState extends State<TextInputPage> {
   late int dotCount;
   List<TextEditingController> textFieldControllers = [];
   int result = 0;
+  late ConfettiController _confettiController;
 
   @override
   void initState() {
-    dotCount = widget.tasks.length;
-    for (var i = 0; i < widget.tasks.length; i++) {
+    _confettiController =
+        ConfettiController(duration: const Duration(seconds: 1));
+    dotCount = widget.task.tasks.length;
+    for (var i = 0; i < widget.task.tasks.length; i++) {
       textFieldControllers.add(TextEditingController());
     }
+  }
+
+  Future<void> saveUserResult() async {
+    await dataManager.saveUserResult(widget.task.id, result);
+    widget.update(true);
   }
 
   @override
@@ -65,9 +72,17 @@ class _TextInputPageState extends State<TextInputPage> {
                   color: light50, strokeColor: Colors.transparent),
             ),
             Expanded(
-              child:
-                  Padding(padding: const EdgeInsets.all(18.0), child: steps()),
-            ),
+                child: Stack(
+              children: [
+                confetti(_confettiController),
+                Padding(
+                    padding: const EdgeInsets.all(18.0),
+                    child: SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      child: steps(),
+                    )),
+              ],
+            )),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [previousButton(), nextButton()],
@@ -78,15 +93,15 @@ class _TextInputPageState extends State<TextInputPage> {
     );
   }
 
-  Column steps() {
-    if (activeStep == widget.tasks.length) {
+  steps() {
+    if (activeStep == widget.task.tasks.length) {
       return Column(
         children: [
           Text(
             'Твой результат: ' +
                 result.toString() +
                 '/' +
-                widget.tasks.length.toString(),
+                widget.task.tasks.length.toString(),
             style: const TextStyle(
                 color: Color(0xffffffff),
                 fontSize: 28,
@@ -100,7 +115,7 @@ class _TextInputPageState extends State<TextInputPage> {
           ListView.builder(
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: widget.tasks.length,
+              itemCount: widget.task.tasks.length,
               itemBuilder: (context, index) {
                 return Padding(
                     padding: const EdgeInsets.only(bottom: 10),
@@ -112,7 +127,7 @@ class _TextInputPageState extends State<TextInputPage> {
                                 ? 'тут пусто :('
                                 : textFieldControllers[index].text) +
                             ', правильный ответ - ' +
-                            widget.tasks[index].rightAnswer,
+                            widget.task.tasks[index].rightAnswer,
                         style: const TextStyle(color: light50, fontSize: 18)));
               }),
           TextButton(
@@ -128,7 +143,7 @@ class _TextInputPageState extends State<TextInputPage> {
         children: [
           const SizedBox(height: 5),
           Text(
-            widget.tasks[activeStep].question,
+            widget.task.tasks[activeStep].question,
             style: const TextStyle(
                 color: Color(0xffffffff),
                 fontSize: 28,
@@ -136,18 +151,27 @@ class _TextInputPageState extends State<TextInputPage> {
           ),
           const SizedBox(height: 10),
           Text(
-            widget.hint,
+            widget.task.hint,
             style: const TextStyle(color: light50, fontSize: 18),
           ),
           const SizedBox(height: 15),
           TextField(
+            enabled: dotCount == widget.task.tasks.length,
             controller: textFieldControllers[activeStep],
             style: const TextStyle(color: Colors.white),
-            decoration: const InputDecoration(
-                enabledBorder: OutlineInputBorder(
+            decoration: InputDecoration(
+                disabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        color: (widget.task.tasks[activeStep].rightAnswer
+                                    .toLowerCase() ==
+                                textFieldControllers[activeStep].text)
+                            ? Colors.green
+                            : Colors.red,
+                        width: 3)),
+                enabledBorder: const OutlineInputBorder(
                   borderSide: BorderSide(color: accent, width: 3),
                 ),
-                focusedBorder: OutlineInputBorder(
+                focusedBorder: const OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.blue, width: 3),
                 ),
                 hintText: 'Введи ответ',
@@ -159,27 +183,28 @@ class _TextInputPageState extends State<TextInputPage> {
   }
 
   Widget nextButton() {
-    if (activeStep < widget.tasks.length) {
+    if (activeStep < widget.task.tasks.length) {
       return GestureDetector(
           onTap: () {
-            if (activeStep < widget.tasks.length - 1) {
+            if (activeStep < widget.task.tasks.length - 1) {
               setState(() {
                 activeStep++;
               });
             } else {
-              if (dotCount == widget.tasks.length) {
+              if (dotCount == widget.task.tasks.length) {
                 setState(() {
-                  for (var i = 0; i < widget.tasks.length; i++) {
-                    if (widget.tasks[i].rightAnswer ==
-                        textFieldControllers[i]) {
+                  for (var i = 0; i < widget.task.tasks.length; i++) {
+                    if (widget.task.tasks[i].rightAnswer.toLowerCase() ==
+                        textFieldControllers[i].text.toLowerCase()) {
                       result++;
                     }
                   }
-                  // if (result > widget.maxResult) {
-                  //
-                  // }
+                  _confettiController.play();
                   dotCount++;
                   activeStep++;
+                  if (result > widget.task.userResult) {
+                    saveUserResult();
+                  }
                 });
               } else {
                 setState(() {

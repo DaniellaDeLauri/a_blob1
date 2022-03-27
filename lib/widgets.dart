@@ -1,4 +1,5 @@
-import 'package:blob/styles.dart';
+import 'package:Blobby/styles.dart';
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:im_stepper/stepper.dart';
 
@@ -18,26 +19,19 @@ class TaskCard extends StatefulWidget {
 }
 
 class _TaskCardState extends State<TaskCard> {
+  void _update(bool result) {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Listener(
-        onPointerDown: (PointerDownEvent a) {
+    return GestureDetector(
+        onTap: () {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) => TextInputPage(
-                  hint:
-                      'Переставь буквы, чтобы получилось слово. Правильный ответ введи в поле.',
-                  tasks: [
-                    TextInputTask(
-                        question: 'ь, т, о, л, в', rightAnswer: 'вольт'),
-                    TextInputTask(
-                        question: 'б, к, а, и, р, с, о',
-                        rightAnswer: 'абрикос'),
-                    TextInputTask(
-                        question: 'у, р, е, г, с, п, е, й, о',
-                        rightAnswer: 'супергерой'),
-                  ]),
+              builder: (BuildContext context) =>
+                  TextInputPage(task: widget.task, update: _update),
             ),
           );
         },
@@ -47,7 +41,7 @@ class _TaskCardState extends State<TaskCard> {
             clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(8)),
-              color: (widget.task.userResult == widget.task.maxResult)
+              color: (widget.task.userResult == widget.task.tasks.length)
                   ? green
                   : accent,
             ),
@@ -57,22 +51,54 @@ class _TaskCardState extends State<TaskCard> {
                   widget.task.name,
                   style: TextStyle(
                       fontSize: 22,
-                      color: (widget.task.userResult == widget.task.maxResult)
-                          ? Colors.white
-                          : dark),
+                      color:
+                          (widget.task.userResult == widget.task.tasks.length)
+                              ? Colors.white
+                              : dark),
                 ),
               ),
               Text(
-                widget.task.maxResult.toString() +
+                widget.task.userResult.toString() +
                     '/' +
-                    widget.task.userResult.toString(),
+                    widget.task.tasks.length.toString(),
                 style: TextStyle(
                     fontWeight: FontWeight.w700,
                     fontSize: 15,
-                    color: (widget.task.userResult == widget.task.maxResult)
+                    color: (widget.task.userResult == widget.task.tasks.length)
                         ? Colors.white
                         : dark),
               ),
             ])));
   }
+}
+
+Widget confetti(ConfettiController _confettiController) {
+  return Positioned(
+    bottom: 0,
+    left: 0,
+    right: 0,
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        ConfettiWidget(
+          minBlastForce: 50,
+          maxBlastForce: 200,
+          numberOfParticles: 5,
+          blastDirection: -1.5708 + 0.3,
+          gravity: 0.5,
+          emissionFrequency: 0.2,
+          confettiController: _confettiController,
+        ),
+        ConfettiWidget(
+          minBlastForce: 50,
+          maxBlastForce: 200,
+          numberOfParticles: 5,
+          blastDirection: -1.5708 - 0.3,
+          gravity: 0.5,
+          emissionFrequency: 0.2,
+          confettiController: _confettiController,
+        )
+      ],
+    ),
+  );
 }
