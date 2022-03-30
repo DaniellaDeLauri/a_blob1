@@ -35,7 +35,7 @@ class DataManager {
         name: 'Синонимы',
         userResult: 0,
         hint:
-            'Дан ряд слов. Вычеркни слово, которое не является синонимом к данному. Правильный ответ введи в поле.',
+            'Дан ряд слов. Найди слово, которое не является синонимом к данному. Правильный ответ введи в поле.',
         tasks: [
           TextInputTask(
               question: 'красивый: изящный, дорогой, привлекательный, нарядный',
@@ -73,7 +73,7 @@ class DataManager {
         name: 'Лишнее слово',
         userResult: 0,
         hint:
-            'Дан ряд слов, в котором все кроме одного (или больше) связаны по смыслу. Вычеркни лишние слова (не соотносящиеся по смыслу или логике с другими). Правильный ответ введи в поле.',
+            'Дан ряд слов, в котором все слова кроме одного связаны по смыслу. Найди лишнее слово. Правильный ответ введи в поле.',
         tasks: [
           TextInputTask(
               question: 'гвоздика, одуванчик, капуста, тюльпан',
@@ -104,6 +104,56 @@ class DataManager {
               rightAnswer: 'провод '),
           TextInputTask(
               question: 'душ, раковина, лейка, ванная', rightAnswer: 'лейка'),
+        ]),
+    Task(
+        id: 3,
+        name: 'Слово по формуле',
+        userResult: 0,
+        hint:
+        'Дан словесный пример. Вычитай и прибавляй слоги, чтобы получить слово. Правильный ответ введи в поле.',
+        tasks: [
+          TextInputTask(question: 'норка - ка + мама - ма + тив + ный', rightAnswer: 'нормативный'),
+          TextInputTask(
+              question: 'с + равнина - на + вата - а + ь', rightAnswer: 'сравнивать'),
+          TextInputTask(
+              question: 'вы + тачка - чка + ски + ванна - нна + ть', rightAnswer: 'вытаскивать'),
+          TextInputTask(
+              question: 'спор - р + сова - ва + б + ство + валик - лик', rightAnswer: 'способствовать'),
+          TextInputTask(
+              question: 'п + код - к + арка - ка + ить', rightAnswer: 'подарить'),
+          TextInputTask(
+              question: 'стоп - оп + рой - й + итель + сок - ок + тво', rightAnswer: 'строительство'),
+          TextInputTask(question: 'веник - еник + ир + усы - ы + ный', rightAnswer: 'вирусный'),
+          TextInputTask(
+              question: 'ухо - хо + валенки - ленки + жар - р + емый', rightAnswer: 'уважаемый'),
+          TextInputTask(
+              question: 'бляха - яха + аго + дом - ом + а + рис - с + ть', rightAnswer: 'благодарить'),
+          TextInputTask(question: 'идол - ол + еда - да + аль + низ - из + ый', rightAnswer: 'идеальный'),
+        ]),
+    Task(
+        id: 4,
+        name: 'Антонимы',
+        userResult: 0,
+        hint:
+        'Найди антоним к данному слову. Правильный ответ введи в поле.',
+        tasks: [
+          TextInputTask(question: 'сердечный', rightAnswer: 'злой'),
+          TextInputTask(
+              question: 'законный', rightAnswer: 'преступный'),
+          TextInputTask(
+              question: 'искренний', rightAnswer: 'фальшивый'),
+          TextInputTask(
+              question: 'натуральный', rightAnswer: 'искуственный'),
+          TextInputTask(
+              question: 'суровый', rightAnswer: 'мягкий'),
+          TextInputTask(
+              question: 'бывший', rightAnswer: 'будущий'),
+          TextInputTask(question: 'банальный', rightAnswer: 'оригинальный'),
+          TextInputTask(
+              question: 'вечерний', rightAnswer: 'утренний'),
+          TextInputTask(
+              question: 'усталый', rightAnswer: 'бодрый'),
+          TextInputTask(question: 'веселый', rightAnswer: 'грустный'),
         ]),
   ];
 
