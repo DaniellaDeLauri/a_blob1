@@ -38,9 +38,9 @@ class _TaskCardState extends State<TaskCard> {
             clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(8)),
-              color: (widget.task.userResult == widget.task.tasks.length)
+              color: (widget.task.userResult == widget.task.tasks.length-1)
                   ? green
-                  : accent,
+                  : orange,
             ),
             child: Row(children: [
               Expanded(
@@ -50,20 +50,20 @@ class _TaskCardState extends State<TaskCard> {
                       fontSize: 22,
                       color:
                       (widget.task.userResult == widget.task.tasks.length)
-                          ? Colors.white
-                          : dark),
+                          ? dark
+                          : accent),
                 ),
               ),
               Text(
                 widget.task.userResult.toString() +
                     '/' +
-                    widget.task.tasks.length.toString(),
+                    (widget.task.tasks.length-1).toString(),
                 style: TextStyle(
                     fontWeight: FontWeight.w700,
                     fontSize: 15,
                     color: (widget.task.userResult == widget.task.tasks.length)
-                        ? Colors.white
-                        : dark),
+                        ? dark
+                        : accent),
               ),
             ])));
   }

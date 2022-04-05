@@ -44,5 +44,5 @@ flutter_icons:
   image_path: "assets/logo.png"
 
 flutter_native_splash: #настроить время, сколько показывается --- сделать через svg?
-  color: "#101010"
+  color: "#FEED9B"
   image: "assets/logo.png"

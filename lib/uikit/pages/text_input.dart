@@ -70,10 +70,10 @@ class _TextInputPageState extends State<TextInputPage> {
               },
               fixedDotDecoration: const FixedDotDecoration(
                   color: Colors.transparent,
-                  strokeColor: light50,
+                  strokeColor: Colors.black,
                   strokeWidth: 1),
               indicatorDecoration: const IndicatorDecoration(
-                  color: light50, strokeColor: Colors.transparent),
+                  color: Colors.black, strokeColor: Colors.transparent),
             ),
             Expanded(
                 child: Stack(
@@ -104,12 +104,12 @@ class _TextInputPageState extends State<TextInputPage> {
       return Colors.blue;
     }
     if (widget.task.tasks[activeStep].rightAnswer.toLowerCase() != text){
-      return Colors.red;
+      return orangege;
     }
-    return Colors.green;
+    return green;
   }
 
-  steps() {
+  steps() { //make activestep -1 ---- for synonyms and antonyms
     if (activeStep == widget.task.tasks.length) {
       return Column(
         children: [
@@ -117,21 +117,21 @@ class _TextInputPageState extends State<TextInputPage> {
             'Твой результат: ' +
                 result.toString() +
                 '/' +
-                widget.task.tasks.length.toString(),
+          (widget.task.tasks.length-1).toString(),
             style: const TextStyle(
-                color: Color(0xffffffff),
+                color: Colors.black,
                 fontSize: 28,
                 fontWeight: FontWeight.w700),
           ),
           const SizedBox(height: 10),
           const Text(
             'Проверь свои ответы',
-            style: TextStyle(color: light50, fontSize: 18),
+            style: TextStyle(color: Colors.black, fontSize: 18),
           ),
           ListView.builder(
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: widget.task.tasks.length,
+              itemCount: widget.task.tasks.length-1,
               itemBuilder: (context, index) {
                 return Padding(
                     padding: const EdgeInsets.only(bottom: 10),
@@ -139,12 +139,12 @@ class _TextInputPageState extends State<TextInputPage> {
                         'Задание ' +
                             (index + 1).toString() +
                             ': твой ответ - ' +
-                            (textFieldControllers[index].text.isEmpty
+                            (textFieldControllers[index+1].text.isEmpty //CHANGE HERE!!!!!!!! TODO -> changed itemcount
                                 ? 'тут пусто :('
-                                : textFieldControllers[index].text) +
+                                : textFieldControllers[index+1].text) +
                             ', правильный ответ - ' +
-                            widget.task.tasks[index].rightAnswer,
-                        style: const TextStyle(color: light50, fontSize: 18)));
+                            widget.task.tasks[index+1].rightAnswer,
+                        style: const TextStyle(color: Colors.black, fontSize: 18)));
               }),
           TextButton(
               onPressed: () {
@@ -153,7 +153,7 @@ class _TextInputPageState extends State<TextInputPage> {
               child: const Text('Меню'))
         ],
       );
-    } else {
+    }else if (activeStep == 0) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -161,20 +161,41 @@ class _TextInputPageState extends State<TextInputPage> {
           Text(
             widget.task.tasks[activeStep].question,
             style: const TextStyle(
-                color: Color(0xffffffff),
+                color: Colors.black,
+                fontSize: 28,
+                fontWeight: FontWeight.w700),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            widget.task.tasks[activeStep].rightAnswer,
+            style: const TextStyle(color: Colors.black, fontSize: 18),
+          ),
+          const SizedBox(height: 15),
+        ],
+      );
+    }
+    else {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 5),
+          Text(
+            widget.task.tasks[activeStep].question,
+            style: const TextStyle(
+                color: Colors.black,
                 fontSize: 28,
                 fontWeight: FontWeight.w700),
           ),
           const SizedBox(height: 10),
           Text(
             widget.task.hint,
-            style: const TextStyle(color: light50, fontSize: 18),
+            style: const TextStyle(color: Colors.black, fontSize: 18),
           ),
           const SizedBox(height: 15),
           TextField( //errorhint
             enabled: dotCount == widget.task.tasks.length,
             controller: textFieldControllers[activeStep],
-            style: const TextStyle(color: Colors.white),
+            style: const TextStyle(color: Colors.black),
             decoration: InputDecoration(
                 enabledBorder: const OutlineInputBorder(
                     borderSide: BorderSide(
@@ -184,7 +205,7 @@ class _TextInputPageState extends State<TextInputPage> {
                   borderSide: BorderSide(color: _colorborder, width: 3),
                 ),
                 hintText: 'Введи ответ',
-                hintStyle: TextStyle(color: light50)),
+                hintStyle: TextStyle(color: Colors.black)),
               onChanged: (_) => setState(() {}),
           ),
         ],
@@ -229,7 +250,7 @@ class _TextInputPageState extends State<TextInputPage> {
               (activeStep < dotCount - 1) ? 'Вперёд' : 'Результаты',
               style: TextStyle(
                   color:
-                      (activeStep < dotCount - 1) ? Colors.white : Colors.blue,
+                      (activeStep < dotCount - 1) ? Colors.black : blue,
                   fontSize: 22),
             ),
           ));
@@ -253,7 +274,7 @@ class _TextInputPageState extends State<TextInputPage> {
           padding: const EdgeInsets.only(left: 15, bottom: 10),
           child: Text(
             (activeStep > 0) ? 'Назад' : 'Выход',
-            style: const TextStyle(color: Colors.white, fontSize: 22),
+            style: const TextStyle(color: Colors.black, fontSize: 22),
           ),
         ));
   }

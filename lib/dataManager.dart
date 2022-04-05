@@ -12,6 +12,9 @@ class DataManager {
         hint:
             'Переставь буквы, чтобы получилось слово. Правильный ответ введи в поле.',
         tasks: [
+          TextInputTask(
+              question: 'Анаграммы',
+              rightAnswer: 'Слова, в которых перепутаны буквы.'),
           TextInputTask(question: 'лансипеь (фрукт)', rightAnswer: 'апельсин'),
           TextInputTask(
               question: 'лотьпа (предмет одежды)', rightAnswer: 'пальто'),
@@ -37,6 +40,9 @@ class DataManager {
         hint:
             'Дан ряд слов. Найди слово, которое не является синонимом к данному. Правильный ответ введи в поле.',
         tasks: [
+          TextInputTask(
+              question: 'Синонимы',
+              rightAnswer: 'Слова, схожие по смыслу, но различные по написанию.'),
           TextInputTask(
               question: 'красивый: изящный, дорогой, привлекательный, нарядный',
               rightAnswer: 'дорогой'),
@@ -76,6 +82,9 @@ class DataManager {
             'Дан ряд слов, в котором все слова кроме одного связаны по смыслу. Найди лишнее слово. Правильный ответ введи в поле.',
         tasks: [
           TextInputTask(
+              question: 'Лишнее слова',
+              rightAnswer: 'Слова, смысл которых никак не связан с исходным списком слов.'),
+          TextInputTask(
               question: 'гвоздика, одуванчик, капуста, тюльпан',
               rightAnswer: 'капуста'),
           TextInputTask(
@@ -102,8 +111,6 @@ class DataManager {
           TextInputTask(
               question: 'магнитофон, компьютер, провод, планшет',
               rightAnswer: 'провод '),
-          TextInputTask(
-              question: 'душ, раковина, лейка, ванная', rightAnswer: 'лейка'),
         ]),
     Task(
         id: 3,
@@ -112,6 +119,9 @@ class DataManager {
         hint:
         'Дан словесный пример. Вычитай и прибавляй слоги, чтобы получить слово. Правильный ответ введи в поле.',
         tasks: [
+          TextInputTask(
+              question: 'Формула',
+              rightAnswer: 'Набор математических операций.'),
           TextInputTask(question: 'норка - ка + мама - ма + тив + ный', rightAnswer: 'нормативный'),
           TextInputTask(
               question: 'с + равнина - на + вата - а + ь', rightAnswer: 'сравнивать'),
@@ -137,6 +147,9 @@ class DataManager {
         hint:
         'Найди антоним к данному слову. Правильный ответ введи в поле.',
         tasks: [
+          TextInputTask(
+              question: 'Антонимы',
+              rightAnswer: 'Слова, противоположные по смыслу.'),
           TextInputTask(question: 'сердечный', rightAnswer: 'злой'),
           TextInputTask(
               question: 'законный', rightAnswer: 'преступный'),
